@@ -19,21 +19,6 @@ public class DaysController {
         this.iDayService = iDayService;
     }
 
-    @PostMapping()
-    void create(@RequestBody DayCreationDto dayCreationDto) {
-        iDayService.create(dayCreationDto);
-    }
-
-    @PutMapping()
-    void update(@RequestBody Day day) throws NoSuchDayException {
-        iDayService.update(day);
-    }
-
-    @DeleteMapping("/{id}")
-    void delete(@PathVariable Integer id) {
-        iDayService.delete(id);
-    }
-
     @GetMapping()
     List<Day> getAll() {
         return iDayService.getAll();

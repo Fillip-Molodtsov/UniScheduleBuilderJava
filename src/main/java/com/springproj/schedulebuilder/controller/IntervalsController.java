@@ -19,16 +19,6 @@ public class IntervalsController {
         this.iIntervalsService = iIntervalsService;
     }
 
-    @PostMapping()
-    void create(@RequestBody IntervalsCreationDto intervalsCreationDto) {
-        iIntervalsService.create(intervalsCreationDto);
-    }
-
-    @PutMapping()
-    void update(@RequestBody Interval interval) throws NoSuchIntervalException {
-        iIntervalsService.update(interval);
-    }
-
     @GetMapping()
     List<Interval> getAll() throws NoSuchIntervalException {
         return iIntervalsService.getAll();
