@@ -5,9 +5,11 @@ import com.springproj.schedulebuilder.model.domain.intervals.Interval;
 import com.springproj.schedulebuilder.model.dto.intervals.IntervalsCreationDto;
 import com.springproj.schedulebuilder.repository.IntervalsRepository;
 import com.springproj.schedulebuilder.service.IIntervalsService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class IntervalsServiceImpl implements IIntervalsService {
     private final IntervalsRepository intervalsRepository;
 
