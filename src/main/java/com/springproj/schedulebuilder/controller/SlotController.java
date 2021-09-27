@@ -42,24 +42,20 @@ public class SlotController {
             @RequestBody SlotCreationBodyDto slotCreationBodyDto,
             @PathVariable Integer subjectId
     ) throws NoSuchSubjectException, NoSuchDayException, NoSuchIntervalException {
-        var subject = iSubjectService.getById(subjectId);
+        var slotCreationDto = SlotCreationDto.builder()
+                .day(slotCreationBodyDto.day)
+                .lection(slotCreationBodyDto.lection)
+                .subject(subjectId)
+                .time(slotCreationBodyDto.time)
+                .room(slotCreationBodyDto.room)
+                .weeks(slotCreationBodyDto.weeks)
+                .build();
 
-        slotCreationBodyDto.weeks.forEach(week -> {
-            var slotCreationDto = SlotCreationDto.builder()
-                    .day(slotCreationBodyDto.day)
-                    .lection(slotCreationBodyDto.lection)
-                    .subject(subjectId)
-                    .time(slotCreationBodyDto.time)
-                    .week(week)
-                    .room(slotCreationBodyDto.room)
-                    .build();
-
-            try {
-                iSlotService.create(slotCreationDto);
-            } catch (NoSuchDayException | NoSuchIntervalException | NoSuchSubjectException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            iSlotService.create(slotCreationDto);
+        } catch (NoSuchDayException | NoSuchIntervalException | NoSuchSubjectException e) {
+            e.printStackTrace();
+        }
     }
 
     @PutMapping("sub/{subjectId}/slot")
@@ -76,8 +72,6 @@ public class SlotController {
                 .day(day)
                 .lection(slotUpdateDto.lection)
                 .room(slotUpdateDto.room)
-                .week(slotUpdateDto.week)
-                .subject(subject)
                 .time(interval)
                 .build();
 

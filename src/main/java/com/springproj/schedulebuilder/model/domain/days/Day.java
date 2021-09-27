@@ -16,7 +16,4 @@ public class Day {
     @Id
     private final Integer id;
     private String value;
-
-    @MappedCollection(keyColumn = "ID", idColumn = "DAY_ID")
-    private Set<Slot> slots;
 }

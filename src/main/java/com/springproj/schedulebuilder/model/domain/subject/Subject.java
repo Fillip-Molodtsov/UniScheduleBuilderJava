@@ -19,7 +19,4 @@ public class Subject {
     private String name;
     private String lecturer;
     private String practitioner;
-
-    @MappedCollection(keyColumn = "ID", idColumn = "SUBJECT_ID")
-    private Set<Slot> slots;
 }

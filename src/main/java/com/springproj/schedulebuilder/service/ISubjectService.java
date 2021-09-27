@@ -2,6 +2,7 @@ package com.springproj.schedulebuilder.service;
 
 import com.springproj.schedulebuilder.exception.NoSuchSubjectException;
 import com.springproj.schedulebuilder.model.domain.subject.Subject;
+import com.springproj.schedulebuilder.model.dto.subject.FullSubject;
 import com.springproj.schedulebuilder.model.dto.subject.SubjectCreationDto;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ISubjectService {
     void delete(Integer subjectId);
 
     List<Subject> getAll();
+
+    FullSubject getFullById(Integer subjectId) throws NoSuchSubjectException;
 }

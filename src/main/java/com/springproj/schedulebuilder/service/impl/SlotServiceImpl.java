@@ -10,7 +10,10 @@ import com.springproj.schedulebuilder.repository.DaysRepository;
 import com.springproj.schedulebuilder.repository.IntervalsRepository;
 import com.springproj.schedulebuilder.repository.SlotRepository;
 import com.springproj.schedulebuilder.repository.SubjectRepository;
+import com.springproj.schedulebuilder.repository.daos.SlotDaoImpl;
+import com.springproj.schedulebuilder.repository.queries.SlotQueries;
 import com.springproj.schedulebuilder.service.ISlotService;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,17 +24,20 @@ public class SlotServiceImpl implements ISlotService {
     private final DaysRepository daysRepository;
     private final IntervalsRepository intervalsRepository;
     private final SubjectRepository subjectRepository;
+    private final SlotDaoImpl slotDao;
 
     SlotServiceImpl(
             SlotRepository slotRepository,
             DaysRepository daysRepository,
             IntervalsRepository intervalsRepository,
-            SubjectRepository subjectRepository
+            SubjectRepository subjectRepository,
+            SlotDaoImpl slotDao
     ) {
         this.slotRepository = slotRepository;
         this.daysRepository = daysRepository;
         this.intervalsRepository = intervalsRepository;
         this.subjectRepository = subjectRepository;
+        this.slotDao = slotDao;
     }
 
     @Override
@@ -40,16 +46,7 @@ public class SlotServiceImpl implements ISlotService {
         var interval = intervalsRepository.findById(slotCreationDto.time).orElseThrow(NoSuchIntervalException::new);
         var subject = subjectRepository.findById(slotCreationDto.subject).orElseThrow(NoSuchSubjectException::new);
 
-        var slot = Slot.builder()
-                .day(day)
-                .lection(slotCreationDto.lection)
-                .room(slotCreationDto.room)
-                .time(interval)
-                .week(slotCreationDto.week)
-                .subject(subject)
-                .build();
-        slotRepository.save(slot);
-
+        slotDao.save(slotCreationDto);
     }
 
     @Override
@@ -59,8 +56,6 @@ public class SlotServiceImpl implements ISlotService {
         slotToUpdate.setDay(slotDto.getDay());
         slotToUpdate.setLection(slotDto.getLection());
         slotToUpdate.setRoom(slotDto.getRoom());
-        slotToUpdate.setSubject(slotDto.getSubject());
-        slotToUpdate.setWeek(slotDto.getWeek());
         slotToUpdate.setTime(slotDto.getTime());
 
         slotRepository.save(slotToUpdate);
@@ -74,7 +69,7 @@ public class SlotServiceImpl implements ISlotService {
 
     @Override
     public void delete(Integer slotId) {
-        slotRepository.deleteById(slotId);
+        slotDao.delete(slotId);
     }
 
     @Override

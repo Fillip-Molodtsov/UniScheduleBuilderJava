@@ -32,14 +32,22 @@ CREATE TABLE slots
     id         IDENTITY PRIMARY KEY,
     day_id     INT        NOT NULL,
     time_id    INT        NOT NULL,
-    subject_id INT        NOT NULL,
     lection    BOOLEAN    NOT NULL,
     room       VARCHAR(8) NOT NULL,
-    week       INT        NOT NULL,
-    FOREIGN KEY (subject_id) REFERENCES subjects (id),
     FOREIGN KEY (day_id) REFERENCES days (id),
     FOREIGN KEY (time_id) REFERENCES intervals (id)
 );
+
+CREATE TABLE subject_slots(
+    id IDENTITY PRIMARY KEY,
+    subject_id INT NOT NULL,
+    slot_id INT NOT NULL,
+    week INT NOT NULL,
+
+    FOREIGN KEY (subject_id) REFERENCES subjects (id),
+    FOREIGN KEY (slot_id) REFERENCES slots (id)
+);
+
 
 INSERT INTO users(username, password)
 VALUES ('user1', '$2a$10$JQor2Lkc5wAN4hWUQQq.wudA2kb/vXUsGevKkmD.xOmCyqLnM.UHm');
@@ -75,3 +83,9 @@ INSERT INTO intervals(id, value)
 VALUES (6, '16:30-17:50');
 INSERT INTO intervals(id, value)
 VALUES (7, '18:00-19:20');
+
+INSERT INTO subjects (name, lecturer, practitioner)
+VALUES ( 'Subject1', 'Lecturer1', 'Practiom1' );
+
+INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID)
+VALUES (true, '-1', 1, 2);

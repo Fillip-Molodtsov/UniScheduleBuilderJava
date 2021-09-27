@@ -1,16 +1,18 @@
 package com.springproj.schedulebuilder.model.dto.slot;
 
+import lombok.Builder;
 import lombok.Data;
 
-import javax.security.auth.Subject;
 import java.util.List;
 
+@Builder
 @Data
 public class SlotUpdateDto {
     public Integer id;
     public Integer day;
     public Integer time;
+    public Integer subject_id;
     public Boolean lection;
     public String room;
-    public Integer week;
+    public List<Integer> weeks;
 }

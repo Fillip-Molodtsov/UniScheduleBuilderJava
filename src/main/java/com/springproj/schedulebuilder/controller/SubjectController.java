@@ -2,6 +2,7 @@ package com.springproj.schedulebuilder.controller;
 
 import com.springproj.schedulebuilder.exception.NoSuchSubjectException;
 import com.springproj.schedulebuilder.model.domain.subject.Subject;
+import com.springproj.schedulebuilder.model.dto.subject.FullSubject;
 import com.springproj.schedulebuilder.model.dto.subject.SubjectCreationDto;
 import com.springproj.schedulebuilder.service.ISubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,10 @@ public class SubjectController {
     @DeleteMapping("/{id}")
     void delete(@PathVariable Integer id) {
         iSubjectService.delete(id);
+    }
+
+    @GetMapping("/{id}/full")
+    FullSubject getFullById(@PathVariable Integer id) throws NoSuchSubjectException {
+        return iSubjectService.getFullById(id);
     }
 }
