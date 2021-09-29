@@ -6,6 +6,7 @@ import com.springproj.schedulebuilder.model.dto.days.DayCreationDto;
 import com.springproj.schedulebuilder.service.IDayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import schedule.logger.springbootconsolelogger.services.LoggingService;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
 @RequestMapping("api/v1/sub/days")
 public class DaysController {
     private IDayService iDayService;
+    @Autowired
+    private LoggingService loggingService;
 
     @Autowired
     public DaysController(IDayService iDayService) {
@@ -21,6 +24,7 @@ public class DaysController {
 
     @GetMapping()
     List<Day> getAll() {
+        loggingService.log("Test_topic","Console logger test");
         return iDayService.getAll();
     }
 }
