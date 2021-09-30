@@ -1,9 +1,14 @@
 spring:
-  config:
-    import:
-      - secrets.yml
   datasource:
     driverClassName: org.h2.Driver
+  profiles:
+    active: dev
 
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - secrets.yml
