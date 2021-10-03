@@ -1,7 +1,12 @@
 package com.springproj.schedulebuilder.repository.daos;
 
+import com.springproj.schedulebuilder.exception.BadRequestException;
+import com.springproj.schedulebuilder.model.domain.slot.Slot;
+import com.springproj.schedulebuilder.model.domain.slot.SubjectSlots;
 import com.springproj.schedulebuilder.model.dto.slot.SlotCreationDto;
 import com.springproj.schedulebuilder.model.dto.slot.SlotUpdateDto;
+import com.springproj.schedulebuilder.repository.DaysRepository;
+import com.springproj.schedulebuilder.repository.IntervalsRepository;
 import com.springproj.schedulebuilder.repository.queries.SlotQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,15 +22,51 @@ import java.util.Objects;
 public class SlotDaoImpl {
     private final SlotQueries slotQueries;
     private final JdbcTemplate jdbcTemplate;
+    private final DaysRepository daysRepository;
+    private final IntervalsRepository intervalsRepository;
 
     @Autowired
-    public SlotDaoImpl(JdbcTemplate jdbcTemplate) {
+    public SlotDaoImpl(
+            JdbcTemplate jdbcTemplate,
+            DaysRepository daysRepository,
+            IntervalsRepository intervalsRepository
+    ) {
         this.jdbcTemplate = jdbcTemplate;
         this.slotQueries = new SlotQueries();
+        this.daysRepository = daysRepository;
+        this.intervalsRepository = intervalsRepository;
+    }
+
+    public Slot findById(Integer id, Integer user_id) throws BadRequestException {
+        var slot = jdbcTemplate.queryForObject(slotQueries.getSlotById, new Object[]{id}, (resultSet, i) -> {
+            var day = daysRepository.findById(resultSet.getInt("day_id"));
+            var interval = intervalsRepository.findById(resultSet.getInt("time_id"));
+            return Slot.builder()
+                    .id(resultSet.getInt("id"))
+                    .day(day.get())
+                    .time(interval.get())
+                    .room(resultSet.getString("room"))
+                    .lection(resultSet.getBoolean("lection"))
+                    .user_id(resultSet.getInt("user_id"))
+                    .build();
+        });
+        assert slot != null;
+        if (!Objects.equals(slot.getUser_id(), user_id)) {
+            throw new BadRequestException("This user doesn't own this slot");
+        }
+        var subjectSlots = jdbcTemplate.query(slotQueries.getSubjectSlotsBySlotId, new Object[]{id}, ((resultSet, i) -> {
+            return SubjectSlots.builder()
+                    .week(resultSet.getInt("week"))
+                    .id(resultSet.getInt("id"))
+                    .user_id(resultSet.getInt("user_id"))
+                    .build();
+        }));
+        slot.setSubjectSlots(subjectSlots);
+        return slot;
     }
 
     @Transactional
-    public void save(SlotCreationDto slot) {
+    public void save(SlotCreationDto slot, Integer user_id) {
         GeneratedKeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement statement = con.prepareStatement(slotQueries.getCreateSlot, Statement.RETURN_GENERATED_KEYS);
@@ -33,6 +74,7 @@ public class SlotDaoImpl {
             statement.setString(2, slot.getRoom());
             statement.setInt(3, slot.getDay());
             statement.setInt(4, slot.getTime());
+            statement.setInt(5, user_id);
             return statement;
         }, holder);
 
@@ -44,6 +86,7 @@ public class SlotDaoImpl {
                 statement.setInt(1, slot.subject);
                 statement.setInt(2, primaryKey);
                 statement.setInt(3, week);
+                statement.setInt(4, user_id);
                 return statement;
             });
         });
@@ -57,6 +100,8 @@ public class SlotDaoImpl {
             statement.setString(2, slot.getRoom());
             statement.setInt(3, slot.getDay());
             statement.setInt(4, slot.getTime());
+            statement.setInt(5, slot.getUser_id());
+            statement.setInt(6, slot.getId());
             return statement;
         });
 
@@ -72,6 +117,7 @@ public class SlotDaoImpl {
                 statement.setInt(1, slot.getSubject_id());
                 statement.setInt(2, slot.getId());
                 statement.setInt(3, week);
+                statement.setInt(4, slot.getUser_id());
                 return statement;
             });
         });

@@ -1,9 +1,6 @@
 package com.springproj.schedulebuilder.controller;
 
-import com.springproj.schedulebuilder.exception.NoSuchDayException;
-import com.springproj.schedulebuilder.exception.NoSuchIntervalException;
-import com.springproj.schedulebuilder.exception.NoSuchSlotException;
-import com.springproj.schedulebuilder.exception.NoSuchSubjectException;
+import com.springproj.schedulebuilder.exception.*;
 import com.springproj.schedulebuilder.model.domain.slot.Slot;
 import com.springproj.schedulebuilder.model.dto.slot.SlotCreationBodyDto;
 import com.springproj.schedulebuilder.model.dto.slot.SlotCreationDto;
@@ -13,6 +10,7 @@ import com.springproj.schedulebuilder.service.IIntervalsService;
 import com.springproj.schedulebuilder.service.ISlotService;
 import com.springproj.schedulebuilder.service.ISubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,8 +38,10 @@ public class SlotController {
     @PostMapping("sub/{subjectId}/slot")
     void create(
             @RequestBody SlotCreationBodyDto slotCreationBodyDto,
-            @PathVariable Integer subjectId
+            @PathVariable Integer subjectId,
+            Authentication authentication
     ) throws NoSuchSubjectException, NoSuchDayException, NoSuchIntervalException {
+        var username = authentication.getName();
         var slotCreationDto = SlotCreationDto.builder()
                 .day(slotCreationBodyDto.day)
                 .lection(slotCreationBodyDto.lection)
@@ -52,8 +52,8 @@ public class SlotController {
                 .build();
 
         try {
-            iSlotService.create(slotCreationDto);
-        } catch (NoSuchDayException | NoSuchIntervalException | NoSuchSubjectException e) {
+            iSlotService.create(slotCreationDto, username);
+        } catch (NoSuchDayException | NoSuchIntervalException | NoSuchSubjectException | BadRequestException e) {
             e.printStackTrace();
         }
     }
@@ -61,9 +61,11 @@ public class SlotController {
     @PutMapping("sub/{subjectId}/slot")
     void update(
             @RequestBody SlotUpdateDto slotUpdateDto,
-            @PathVariable Integer subjectId
-    ) throws NoSuchSubjectException, NoSuchSlotException, NoSuchDayException, NoSuchIntervalException {
-        var subject = iSubjectService.getById(subjectId);
+            @PathVariable Integer subjectId,
+            Authentication authentication
+    ) throws NoSuchSubjectException, NoSuchSlotException, NoSuchDayException, NoSuchIntervalException, BadRequestException, NoSuchFieldException {
+        var username = authentication.getName();
+        var subject = iSubjectService.getById(subjectId, username);
         var day = iDayService.getById(slotUpdateDto.day);
         var interval = iIntervalsService.getById(slotUpdateDto.time);
 
@@ -76,19 +78,25 @@ public class SlotController {
                 .build();
 
 
-        iSlotService.update(slot);
+        iSlotService.update(slot, username);
     }
 
     @GetMapping("sub/{subjectId}/slot/{slotId}")
     Slot getSlot(
             @PathVariable Integer slotId,
-            @PathVariable String subjectId
-    ) throws NoSuchSlotException {
-        return iSlotService.getById(slotId);
+            @PathVariable String subjectId,
+            Authentication authentication
+    ) throws NoSuchSlotException, BadRequestException {
+        var username = authentication.getName();
+        return iSlotService.getById(slotId, username);
     }
 
     @DeleteMapping("slot/{slotId}")
-    void delete(@PathVariable Integer slotId) {
-        iSlotService.delete(slotId);
+    void delete(
+            @PathVariable Integer slotId,
+            Authentication authentication
+    ) throws NoSuchSlotException, BadRequestException {
+        var username = authentication.getName();
+        iSlotService.delete(slotId, username);
     }
 }

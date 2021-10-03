@@ -21,4 +21,5 @@ public class SubjectSlots {
     private final Subject subject;
 
     private final Integer week;
+    private Integer user_id;
 }

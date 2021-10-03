@@ -24,7 +24,9 @@ CREATE TABLE subjects
     id           IDENTITY PRIMARY KEY,
     name         VARCHAR(250) NOT NULL,
     lecturer     VARCHAR(96)  NOT NULL,
-    practitioner VARCHAR(96)  NOT NULL
+    practitioner VARCHAR(96)  NOT NULL,
+    user_id      INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE slots
@@ -34,6 +36,8 @@ CREATE TABLE slots
     time_id    INT        NOT NULL,
     lection    BOOLEAN    NOT NULL,
     room       VARCHAR(8) NOT NULL,
+    user_id      INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (day_id) REFERENCES days (id),
     FOREIGN KEY (time_id) REFERENCES intervals (id)
 );
@@ -43,7 +47,8 @@ CREATE TABLE subject_slots(
     subject_id INT NOT NULL,
     slot_id INT NOT NULL,
     week INT NOT NULL,
-
+    user_id      INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (subject_id) REFERENCES subjects (id),
     FOREIGN KEY (slot_id) REFERENCES slots (id)
 );
@@ -84,8 +89,11 @@ VALUES (6, '16:30-17:50');
 INSERT INTO intervals(id, value)
 VALUES (7, '18:00-19:20');
 
-INSERT INTO subjects (name, lecturer, practitioner)
-VALUES ( 'Subject1', 'Lecturer1', 'Practiom1' );
+INSERT INTO subjects (name, lecturer, practitioner, user_id)
+VALUES ( 'Subject1', 'Lecturer1', 'Practiom1', 1);
 
-INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID)
-VALUES (true, '-1', 1, 2);
+INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID, user_id)
+VALUES (true, '-1', 1, 2, 1);
+
+INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID, user_id)
+VALUES (false, '-1', 3, 3, 1);

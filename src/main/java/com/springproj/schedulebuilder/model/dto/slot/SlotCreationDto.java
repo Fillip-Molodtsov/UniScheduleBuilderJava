@@ -14,5 +14,6 @@ public class SlotCreationDto {
     public Integer subject;
     public Boolean lection;
     public String room;
+    private Integer user_id;
     public List<Integer> weeks;
 }

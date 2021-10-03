@@ -19,4 +19,5 @@ public class Subject {
     private String name;
     private String lecturer;
     private String practitioner;
+    private Integer user_id;
 }
