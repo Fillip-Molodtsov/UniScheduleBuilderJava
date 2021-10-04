@@ -12,6 +12,7 @@ public class SlotUpdateDto {
     public Integer day;
     public Integer time;
     public Integer subject_id;
+    private Integer user_id;
     public Boolean lection;
     public String room;
     public List<Integer> weeks;

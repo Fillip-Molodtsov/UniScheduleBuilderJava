@@ -28,4 +28,5 @@ public class Slot {
 
     private Boolean lection;
     private String room;
+    private Integer user_id;
 }

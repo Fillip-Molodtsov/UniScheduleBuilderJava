@@ -1,11 +1,11 @@
 package com.springproj.schedulebuilder.controller;
 
+import com.springproj.schedulebuilder.exception.BadRequestException;
 import com.springproj.schedulebuilder.model.dto.timetable.Timetable;
 import com.springproj.schedulebuilder.service.ITimetableService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.springproj.schedulebuilder.service.IUserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("api/v1/app")
 public class AppController {
     private ITimetableService iTimetableService;
-
     AppController(
             ITimetableService iTimetableService
     ) {
@@ -23,8 +22,18 @@ public class AppController {
 
     @GetMapping("timetable")
     List<Timetable> getTimetable(
-            @RequestParam(required = false, name = "query") Integer query
-    ) {
-        return iTimetableService.getTimetable(query);
+            @RequestParam(required = false, name = "query") Integer query,
+            Authentication authentication
+    ) throws NoSuchFieldException {
+        final var name = authentication.getName();
+        return iTimetableService.getTimetable(query, name);
+    }
+
+    @PostMapping("clear")
+    void clear(
+        Authentication authentication
+    ) throws BadRequestException {
+        var username = authentication.getName();
+        iTimetableService.clear(username);
     }
 }

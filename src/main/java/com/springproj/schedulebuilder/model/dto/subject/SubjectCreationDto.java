@@ -7,4 +7,5 @@ public class SubjectCreationDto {
     public String name;
     public String lecturer;
     public String practitioner;
+    private Integer user_id;
 }
