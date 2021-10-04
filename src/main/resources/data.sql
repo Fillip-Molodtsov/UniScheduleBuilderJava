@@ -91,9 +91,3 @@ VALUES (7, '18:00-19:20');
 
 INSERT INTO subjects (name, lecturer, practitioner, user_id)
 VALUES ( 'Subject1', 'Lecturer1', 'Practiom1', 1);
-
-INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID, user_id)
-VALUES (true, '-1', 1, 2, 1);
-
-INSERT INTO SLOTS (LECTION, ROOM, DAY_ID, TIME_ID, user_id)
-VALUES (false, '-1', 3, 3, 1);
