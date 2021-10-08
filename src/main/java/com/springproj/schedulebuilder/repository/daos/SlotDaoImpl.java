@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -63,6 +65,19 @@ public class SlotDaoImpl {
         }));
         slot.setSubjectSlots(subjectSlots);
         return slot;
+    }
+
+    public List<Slot> findByUserSubject(Integer subjectId, Integer userId) {
+        var ids = jdbcTemplate.queryForList(slotQueries.getSlotsBySubject, new Object[]{subjectId, userId}, Integer.class);
+        List<Slot> result = new ArrayList<>();
+        ids.forEach( i -> {
+            try {
+                result.add(findById(i, userId));
+            } catch (BadRequestException e) {
+                e.printStackTrace();
+            }
+        });
+        return result;
     }
 
     @Transactional

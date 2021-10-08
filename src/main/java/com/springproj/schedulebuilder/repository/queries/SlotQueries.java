@@ -16,4 +16,7 @@ public class SlotQueries {
             "WHERE ID = ?";
     public final String getSlotById = "SELECT * FROM SLOTS WHERE ID = ?";
     public final String getSubjectSlotsBySlotId = "SELECT * FROM SUBJECT_SLOTS WHERE SLOT_ID = ?";
+    public final String getSlotsBySubject = "SELECT DISTINCT SLOT_ID\n" +
+            "FROM SUBJECT_SLOTS SS\n" +
+            "WHERE SS.SUBJECT_ID = ? AND SS.USER_ID = ?";
 }

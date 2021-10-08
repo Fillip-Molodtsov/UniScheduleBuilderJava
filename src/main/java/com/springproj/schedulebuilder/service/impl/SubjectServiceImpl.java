@@ -9,7 +9,9 @@ import com.springproj.schedulebuilder.model.dto.subject.SubjectCreationDto;
 import com.springproj.schedulebuilder.repository.AppUserRepository;
 import com.springproj.schedulebuilder.repository.SlotRepository;
 import com.springproj.schedulebuilder.repository.SubjectRepository;
+import com.springproj.schedulebuilder.repository.daos.SlotDaoImpl;
 import com.springproj.schedulebuilder.service.ISubjectService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,20 +19,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class SubjectServiceImpl implements ISubjectService {
     private SubjectRepository subjectRepository;
     private SlotRepository slotRepository;
+    private SlotDaoImpl slotDao;
     private AppUserRepository appUserRepository;
-
-    SubjectServiceImpl(
-            SubjectRepository subjectRepository,
-            SlotRepository slotRepository,
-            AppUserRepository appUserRepository
-    ) {
-        this.subjectRepository = subjectRepository;
-        this.slotRepository = slotRepository;
-        this.appUserRepository = appUserRepository;
-    }
 
     @Override
     public void create(SubjectCreationDto subjectDto, String username) throws BadRequestException {
@@ -81,8 +75,7 @@ public class SubjectServiceImpl implements ISubjectService {
         if (!Objects.equals(user.getId(), subject.getUser_id())) {
             throw new BadRequestException("This user doesn't own this subject");
         }
-        var slots = (List<Slot>) slotRepository.findAll();
-        slots = slots.stream().filter(el -> Objects.equals(el.getUser_id(), user.getId())).collect(Collectors.toList());
+        var slots = slotDao.findByUserSubject(subject.getId(), user.getId());
         return FullSubject.builder()
                 .name(subject.getName())
                 .lecturer(subject.getLecturer())
