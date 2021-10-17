@@ -1,8 +1,8 @@
 package com.springproj.schedulebuilder.service.impl;
 
+import com.springproj.schedulebuilder.config.LogMarkers;
 import com.springproj.schedulebuilder.exception.BadRequestException;
 import com.springproj.schedulebuilder.exception.NoSuchSubjectException;
-import com.springproj.schedulebuilder.model.domain.slot.Slot;
 import com.springproj.schedulebuilder.model.domain.subject.Subject;
 import com.springproj.schedulebuilder.model.dto.subject.FullSubject;
 import com.springproj.schedulebuilder.model.dto.subject.SubjectCreationDto;
@@ -12,6 +12,10 @@ import com.springproj.schedulebuilder.repository.SubjectRepository;
 import com.springproj.schedulebuilder.repository.daos.SlotDaoImpl;
 import com.springproj.schedulebuilder.service.ISubjectService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,17 +29,23 @@ public class SubjectServiceImpl implements ISubjectService {
     private SlotRepository slotRepository;
     private SlotDaoImpl slotDao;
     private AppUserRepository appUserRepository;
+    private static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
 
     @Override
     public void create(SubjectCreationDto subjectDto, String username) throws BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
-        var subject = Subject.builder()
+        subjectRepository.save(Subject.builder()
                 .name(subjectDto.name)
                 .lecturer(subjectDto.lecturer)
                 .practitioner(subjectDto.practitioner)
                 .user_id(user.getId())
-                .build();
-        subjectRepository.save(subject);
+                .build());
+        MDC.put("user.id", user.getId().toString());
+        var confidentialMarker = MarkerFactory.getMarker(LogMarkers.CONFIDENTIAL.name());
+        MDC.put("user.id", user.getId().toString());
+        logger.trace(confidentialMarker, "User {} created a subject", user.getUsername());
+        logger.trace("Subject {} created", subjectDto.name);
+        MDC.clear();
     }
 
     @Override
@@ -61,6 +71,7 @@ public class SubjectServiceImpl implements ISubjectService {
         }
         return subject;
     }
+
     @Override
     public List<Subject> getAll(String username) throws BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
