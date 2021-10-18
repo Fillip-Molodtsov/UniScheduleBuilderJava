@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1")
 public class SlotController {
@@ -37,7 +39,7 @@ public class SlotController {
 
     @PostMapping("sub/{subjectId}/slot")
     void create(
-            @RequestBody SlotCreationBodyDto slotCreationBodyDto,
+            @RequestBody @Valid SlotCreationBodyDto slotCreationBodyDto,
             @PathVariable Integer subjectId,
             Authentication authentication
     ) throws NoSuchSubjectException, NoSuchDayException, NoSuchIntervalException {
