@@ -85,4 +85,15 @@ public class SlotServiceImpl implements ISlotService {
         return (List<Slot>) slotRepository.findAll();
     }
 
+    @Override
+    public void patch(Integer slotId, String ownerUsername, String username) throws NoSuchSlotException, BadRequestException {
+        var slotToUpdate = slotRepository.findById(slotId).orElseThrow(NoSuchSlotException::new);
+        var user = appUserRepository.findByUsername(ownerUsername).orElseThrow(BadRequestException::new);
+        if (!Objects.equals(slotToUpdate.getUser_id(), user.getId()))
+            throw new BadRequestException("This user doesn't own this slot");
+        var newUser = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
+        slotToUpdate.setUser_id(newUser.getId());
+        slotRepository.save(slotToUpdate);
+    }
+
 }

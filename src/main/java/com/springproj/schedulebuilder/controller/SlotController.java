@@ -101,4 +101,14 @@ public class SlotController {
         var username = authentication.getName();
         iSlotService.delete(slotId, username);
     }
+
+    @PatchMapping("slot/{slotId}/{username}")
+    void patchSlot(
+            @PathVariable Integer slotId,
+            @PathVariable String username,
+            Authentication authentication
+    ) throws NoSuchSlotException, BadRequestException {
+        var ownerUsername = authentication.getName();
+        iSlotService.patch(slotId, ownerUsername, username);
+    }
 }
