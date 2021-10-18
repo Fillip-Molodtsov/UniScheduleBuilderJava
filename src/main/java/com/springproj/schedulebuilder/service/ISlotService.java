@@ -16,4 +16,6 @@ public interface ISlotService {
     void delete(Integer slotId, String username) throws NoSuchSlotException, BadRequestException;
 
     List<Slot> getAll();
+
+    void patch(Integer slotId, String ownerUsername, String username) throws NoSuchSlotException, BadRequestException;
 }
