@@ -1,0 +1,724 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "OpenAPI definition",
+      "version": "v0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/api/v1/sub": {
+        "put": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "update",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subject"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "create",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectCreationDto"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/sub/{subjectId}/slot": {
+        "put": {
+          "tags": [
+            "slot-controller"
+          ],
+          "operationId": "update_1",
+          "parameters": [
+            {
+              "name": "subjectId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlotUpdateDto"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "slot-controller"
+          ],
+          "operationId": "create_1",
+          "parameters": [
+            {
+              "name": "subjectId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlotCreationBodyDto"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/public/user/sign-up": {
+        "post": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "signUp",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppUser"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/app/clear": {
+        "post": {
+          "tags": [
+            "app-controller"
+          ],
+          "operationId": "clear",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/slot/{slotId}/{username}": {
+        "patch": {
+          "tags": [
+            "slot-controller"
+          ],
+          "operationId": "patchSlot",
+          "parameters": [
+            {
+              "name": "slotId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/sub/{subjectId}/slot/{slotId}": {
+        "get": {
+          "tags": [
+            "slot-controller"
+          ],
+          "operationId": "getSlot",
+          "parameters": [
+            {
+              "name": "slotId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "subjectId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Slot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/sub/{id}": {
+        "get": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "getById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Subject"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "delete",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/sub/{id}/full": {
+        "get": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "getFullById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FullSubject"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/sub/time-intervals": {
+        "get": {
+          "tags": [
+            "intervals-controller"
+          ],
+          "operationId": "getAll",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Interval"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/sub/days": {
+        "get": {
+          "tags": [
+            "days-controller"
+          ],
+          "operationId": "getAll_1",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Day"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/sub/all": {
+        "get": {
+          "tags": [
+            "subject-controller"
+          ],
+          "operationId": "getAll_2",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Subject"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/app/timetable": {
+        "get": {
+          "tags": [
+            "app-controller"
+          ],
+          "operationId": "getTimetable",
+          "parameters": [
+            {
+              "name": "query",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Timetable"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/slot/{slotId}": {
+        "delete": {
+          "tags": [
+            "slot-controller"
+          ],
+          "operationId": "delete_1",
+          "parameters": [
+            {
+              "name": "slotId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Subject": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "name": {
+              "type": "string"
+            },
+            "lecturer": {
+              "type": "string"
+            },
+            "practitioner": {
+              "type": "string"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "SlotUpdateDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "day": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "time": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "subject_id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "lection": {
+              "type": "boolean"
+            },
+            "room": {
+              "type": "string"
+            },
+            "weeks": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "SubjectCreationDto": {
+          "required": [
+            "lecturer",
+            "name",
+            "practitioner"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "lecturer": {
+              "type": "string"
+            },
+            "practitioner": {
+              "type": "string"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "SlotCreationBodyDto": {
+          "required": [
+            "day",
+            "room",
+            "time"
+          ],
+          "type": "object",
+          "properties": {
+            "day": {
+              "maximum": 7,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            },
+            "time": {
+              "maximum": 7,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            },
+            "lection": {
+              "type": "boolean"
+            },
+            "room": {
+              "type": "string"
+            },
+            "weeks": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "AppUser": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "Day": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "Interval": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "Slot": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "day": {
+              "$ref": "#/components/schemas/Day"
+            },
+            "time": {
+              "$ref": "#/components/schemas/Interval"
+            },
+            "subjectSlots": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SubjectSlots"
+              }
+            },
+            "lection": {
+              "type": "boolean"
+            },
+            "room": {
+              "type": "string"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "SubjectSlots": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "slot": {
+              "$ref": "#/components/schemas/Slot"
+            },
+            "subject": {
+              "$ref": "#/components/schemas/Subject"
+            },
+            "week": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "FullSubject": {
+          "type": "object",
+          "properties": {
+            "subjectId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "name": {
+              "type": "string"
+            },
+            "lecturer": {
+              "type": "string"
+            },
+            "practitioner": {
+              "type": "string"
+            },
+            "slots": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Slot"
+              }
+            }
+          }
+        },
+        "Timetable": {
+          "type": "object",
+          "properties": {
+            "day": {
+              "type": "string"
+            },
+            "slots": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TimetableSlot"
+              }
+            }
+          }
+        },
+        "TimetableSlot": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            },
+            "teacher": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "room": {
+              "type": "string"
+            },
+            "week": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    }
+  }
