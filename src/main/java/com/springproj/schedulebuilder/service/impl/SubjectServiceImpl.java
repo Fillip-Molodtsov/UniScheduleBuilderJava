@@ -18,6 +18,7 @@ import org.slf4j.MDC;
 import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class SubjectServiceImpl implements ISubjectService {
     private static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
 
     @Override
-    public void create(SubjectCreationDto subjectDto, String username) throws BadRequestException {
+    public void create(@Valid SubjectCreationDto subjectDto, String username) throws BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
         subjectRepository.save(Subject.builder()
                 .name(subjectDto.name)
