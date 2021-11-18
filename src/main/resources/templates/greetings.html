@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1 sec:authorize="!isAuthenticated()">
+    Hello stranger
+</h1>
+<h1 sec:authorize="isAuthenticated()">
+    This text is displayed for authenticated users.
+</h1>
+<h2 sec:authorize="hasRole('ROLE_ADMIN')">
+    You are an admin
+</h2>
+<h2 sec:authorize="hasRole('ROLE_USER')">
+    You are an auth user
+</h2>
+</body>
+</html>
