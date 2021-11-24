@@ -11,6 +11,8 @@ import com.springproj.schedulebuilder.repository.SlotRepository;
 import com.springproj.schedulebuilder.repository.SubjectRepository;
 import com.springproj.schedulebuilder.repository.daos.SlotDaoImpl;
 import com.springproj.schedulebuilder.service.ISubjectService;
+import com.springproj.schedulebuilder.util.LogExecTime;
+import com.springproj.schedulebuilder.util.LogSignature;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,7 @@ public class SubjectServiceImpl implements ISubjectService {
     }
 
     @Override
+    @LogSignature
     public Subject getById(Integer subjectId, String username) throws NoSuchSubjectException, BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
         var subject = subjectRepository.findById(subjectId).orElseThrow(NoSuchSubjectException::new);
@@ -74,6 +77,7 @@ public class SubjectServiceImpl implements ISubjectService {
     }
 
     @Override
+    @LogExecTime
     public List<Subject> getAll(String username) throws BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
         var subjects = (List<Subject>) subjectRepository.findAll();
