@@ -7,9 +7,8 @@ import com.springproj.schedulebuilder.model.domain.subject.Subject;
 import com.springproj.schedulebuilder.model.dto.subject.FullSubject;
 import com.springproj.schedulebuilder.model.dto.subject.SubjectCreationDto;
 import com.springproj.schedulebuilder.repository.AppUserRepository;
-import com.springproj.schedulebuilder.repository.SlotRepository;
+import com.springproj.schedulebuilder.repository.SlotDao;
 import com.springproj.schedulebuilder.repository.SubjectRepository;
-import com.springproj.schedulebuilder.repository.daos.SlotDaoImpl;
 import com.springproj.schedulebuilder.service.ISubjectService;
 import com.springproj.schedulebuilder.util.LogExecTime;
 import com.springproj.schedulebuilder.util.LogSignature;
@@ -29,8 +28,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SubjectServiceImpl implements ISubjectService {
     private SubjectRepository subjectRepository;
-    private SlotRepository slotRepository;
-    private SlotDaoImpl slotDao;
+    private SlotDao slotDao;
     private AppUserRepository appUserRepository;
     private static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
 

@@ -8,11 +8,9 @@ import com.springproj.schedulebuilder.model.dto.timetable.Timetable;
 import com.springproj.schedulebuilder.model.dto.timetable.TimetableSlot;
 import com.springproj.schedulebuilder.repository.AppUserRepository;
 import com.springproj.schedulebuilder.repository.DaysRepository;
-import com.springproj.schedulebuilder.repository.SubjectSlotsRepository;
-import com.springproj.schedulebuilder.repository.daos.TimetableDaoImpl;
+import com.springproj.schedulebuilder.repository.TimetableDao;
 import com.springproj.schedulebuilder.service.ITimetableService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,21 +18,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class TimetableServiceImpl implements ITimetableService {
     private final DaysRepository daysRepository;
-    private final TimetableDaoImpl timetableDao;
+    private final TimetableDao timetableDao;
     private final AppUserRepository appUserRepository;
-
-    @Autowired
-    TimetableServiceImpl(
-            DaysRepository daysRepository,
-            TimetableDaoImpl timetableDao,
-            AppUserRepository appUserRepository
-    ) {
-        this.daysRepository = daysRepository;
-        this.timetableDao = timetableDao;
-        this.appUserRepository = appUserRepository;
-    }
 
     public List<Timetable> getTimetable(Integer query, String username) throws NoSuchFieldException {
         List<Day> days = (List<Day>) daysRepository.findAll();

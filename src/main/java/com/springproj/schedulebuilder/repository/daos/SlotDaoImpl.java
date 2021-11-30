@@ -7,6 +7,7 @@ import com.springproj.schedulebuilder.model.dto.slot.SlotCreationDto;
 import com.springproj.schedulebuilder.model.dto.slot.SlotUpdateDto;
 import com.springproj.schedulebuilder.repository.DaysRepository;
 import com.springproj.schedulebuilder.repository.IntervalsRepository;
+import com.springproj.schedulebuilder.repository.SlotDao;
 import com.springproj.schedulebuilder.repository.queries.SlotQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public class SlotDaoImpl {
+public class SlotDaoImpl implements SlotDao {
     private final SlotQueries slotQueries;
     private final JdbcTemplate jdbcTemplate;
     private final DaysRepository daysRepository;
@@ -39,6 +40,7 @@ public class SlotDaoImpl {
         this.intervalsRepository = intervalsRepository;
     }
 
+    @Override
     public Slot findById(Integer id, Integer user_id) throws BadRequestException {
         var slot = jdbcTemplate.queryForObject(slotQueries.getSlotById, new Object[]{id}, (resultSet, i) -> {
             var day = daysRepository.findById(resultSet.getInt("day_id"));
@@ -67,6 +69,7 @@ public class SlotDaoImpl {
         return slot;
     }
 
+    @Override
     public List<Slot> findByUserSubject(Integer subjectId, Integer userId) {
         var ids = jdbcTemplate.queryForList(slotQueries.getSlotsBySubject, new Object[]{subjectId, userId}, Integer.class);
         List<Slot> result = new ArrayList<>();
@@ -80,6 +83,7 @@ public class SlotDaoImpl {
         return result;
     }
 
+    @Override
     @Transactional
     public void save(SlotCreationDto slot, Integer user_id) {
         GeneratedKeyHolder holder = new GeneratedKeyHolder();
@@ -107,6 +111,7 @@ public class SlotDaoImpl {
         });
     }
 
+    @Override
     @Transactional
     public void update(SlotUpdateDto slot) {
         jdbcTemplate.update(con -> {
@@ -138,6 +143,7 @@ public class SlotDaoImpl {
         });
     }
 
+    @Override
     @Transactional
     public void delete(Integer id) {
         jdbcTemplate.update(con -> {

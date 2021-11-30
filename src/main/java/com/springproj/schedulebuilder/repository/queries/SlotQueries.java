@@ -1,5 +1,8 @@
 package com.springproj.schedulebuilder.repository.queries;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SlotQueries {
     public final String getCreateSlot = "INSERT INTO SLOTS " +
             "(LECTION, ROOM, DAY_ID, TIME_ID, USER_ID) " +
