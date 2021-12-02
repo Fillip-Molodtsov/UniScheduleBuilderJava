@@ -5,6 +5,7 @@ import com.springproj.schedulebuilder.model.domain.intervals.Interval;
 import com.springproj.schedulebuilder.model.dto.intervals.IntervalsCreationDto;
 import com.springproj.schedulebuilder.repository.IntervalsRepository;
 import com.springproj.schedulebuilder.service.IIntervalsService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class IntervalsServiceImpl implements IIntervalsService {
     }
 
     @Override
+    @Cacheable(value = "intervals")
     public List<Interval> getAll() {
         return (List<Interval>) intervalsRepository.findAll();
     }

@@ -5,6 +5,10 @@ import com.springproj.schedulebuilder.model.domain.days.Day;
 import com.springproj.schedulebuilder.model.dto.days.DayCreationDto;
 import com.springproj.schedulebuilder.repository.DaysRepository;
 import com.springproj.schedulebuilder.service.IDayService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +50,7 @@ public class DayServiceImpl implements IDayService {
     }
 
     @Override
+    @Cacheable(value = "days")
     public List<Day> getAll() {
         return (List<Day>) daysRepository.findAll();
     }

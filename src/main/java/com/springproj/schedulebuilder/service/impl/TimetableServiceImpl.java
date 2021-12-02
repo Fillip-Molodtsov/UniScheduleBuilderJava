@@ -11,6 +11,8 @@ import com.springproj.schedulebuilder.repository.DaysRepository;
 import com.springproj.schedulebuilder.repository.TimetableDao;
 import com.springproj.schedulebuilder.service.ITimetableService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,6 +69,12 @@ public class TimetableServiceImpl implements ITimetableService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value="intervals", allEntries = true),
+                    @CacheEvict(value="days", allEntries = true)
+            }
+    )
     public void clear(String username) throws BadRequestException {
         var user = appUserRepository.findByUsername(username).orElseThrow(BadRequestException::new);
         timetableDao.clear(user.getId());
