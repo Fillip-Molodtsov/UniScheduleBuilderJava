@@ -3,18 +3,18 @@ package com.springproj.schedulebuilder.config;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ProjectSimpleCacheManager implements CacheManager, InitializingBean {
     private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
     private volatile Set<String> cacheNames = Collections.emptySet();
-    private Collection<? extends Cache> caches = Collections.emptySet();
+    private final Collection<? extends Cache> caches = Arrays.asList(
+            new ConcurrentMapCache("intervals"),
+            new ConcurrentMapCache("days"));
 
     @Override
     public void afterPropertiesSet() {
@@ -35,10 +35,6 @@ public class ProjectSimpleCacheManager implements CacheManager, InitializingBean
             }
             this.cacheNames = Collections.unmodifiableSet(cacheNames);
         }
-    }
-
-    public void setCaches(Collection<? extends Cache> caches) {
-        this.caches = caches;
     }
 
     protected Collection<? extends Cache> loadCaches() {
